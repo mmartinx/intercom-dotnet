@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Exceptions;
@@ -33,86 +34,86 @@ namespace Intercom.Clients
         {
         }
 
-        public AppCount GetAppCount()
+        public async Task<AppCount> GetAppCount()
         {
             ClientResponse<AppCount> result = null;
-            result = Get<AppCount>();
+            result = await Get<AppCount>();
             return result.Result;
         }
 
-        public ConversationAppCount GetConversationAppCount()
+        public async Task<ConversationAppCount> GetConversationAppCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.CONVERSATION);
 
             ClientResponse<ConversationAppCount> result = null;
-            result = Get<ConversationAppCount>(parameters: parameters);
+            result = await Get<ConversationAppCount>(parameters: parameters);
             return result.Result;
         }
 
-        public ConversationAdminCount GetConversationAdminCount()
+        public async Task<ConversationAdminCount> GetConversationAdminCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.CONVERSATION);
             parameters.Add(Constants.COUNT, Constants.ADMIN);
 
             ClientResponse<ConversationAdminCount> result = null;
-            result = Get<ConversationAdminCount>(parameters: parameters);
+            result = await Get<ConversationAdminCount>(parameters: parameters);
             return result.Result;
         }
 
-        public UserTagCount GetUserTagCount()
+        public async Task<UserTagCount> GetUserTagCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.USER);
             parameters.Add(Constants.COUNT, Constants.TAG);
 
             ClientResponse<UserTagCount> result = null;
-            result = Get<UserTagCount>(parameters: parameters);
+            result = await Get<UserTagCount>(parameters: parameters);
             return result.Result;
         }
 
-        public UserSegmentCount GetUserSegmentCount()
+        public async Task<UserSegmentCount> GetUserSegmentCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.USER);
             parameters.Add(Constants.COUNT, Constants.SEGMENT);
 
             ClientResponse<UserSegmentCount> result = null;
-            result = Get<UserSegmentCount>(parameters: parameters);
+            result = await Get<UserSegmentCount>(parameters: parameters);
             return result.Result;
         }
 
-        public CompanySegmentCount GetCompanySegmentCount()
+        public async Task<CompanySegmentCount> GetCompanySegmentCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.COMPANY);
             parameters.Add(Constants.COUNT, Constants.SEGMENT);
 
             ClientResponse<CompanySegmentCount> result = null;
-            result = Get<CompanySegmentCount>(parameters: parameters);
+            result = await Get<CompanySegmentCount>(parameters: parameters);
             return result.Result;
         }
 
-        public CompanyTagCount GetCompanyTagCount()
+        public async Task<CompanyTagCount> GetCompanyTagCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.COMPANY);
             parameters.Add(Constants.COUNT, Constants.TAG);
 
             ClientResponse<CompanyTagCount> result = null;
-            result = Get<CompanyTagCount>(parameters: parameters);
+            result = await Get<CompanyTagCount>(parameters: parameters);
             return result.Result;
         }
 
-        public CompanyUserCount GetCompanyUserCount()
+        public async Task<CompanyUserCount> GetCompanyUserCount()
         {
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             parameters.Add(Constants.TYPE, Constants.COMPANY);
             parameters.Add(Constants.COUNT, Constants.USER);
 
             ClientResponse<CompanyUserCount> result = null;
-            result = Get<CompanyUserCount>(parameters: parameters);
+            result = await Get<CompanyUserCount>(parameters: parameters);
             return result.Result;
         }
     }

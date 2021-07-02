@@ -59,41 +59,7 @@ namespace Intercom.Core
             _restClientFactory = new RestClientFactory(authentication, intercomApiUrl);
         }
 
-        protected virtual ClientResponse<T> Get<T>(
-            Dictionary<String, String> headers = null,
-            Dictionary<String, String> parameters = null,
-            String resource = null)
-            where T : class
-        {
-            ClientResponse<T> clientResponse = null;
-
-            IRestClient client = null;
-            try
-            {
-                client = BuildClient();
-                IRestRequest request = BuildRequest(httpMethod: Method.GET, headers: headers, parameters: parameters, resource: resource);
-                IRestResponse response = client.Execute(request);
-                clientResponse = HandleResponse<T>(response);
-            }
-            catch (ApiException ex)
-            {
-                throw ex;
-            }
-            catch (JsonConverterException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new IntercomException(String.Format("An exception occurred " +
-                        "while calling the endpoint. Method: {0}, Url: {1}, Resource: {2}, Sub-Resource: {3}",
-                        "GET", client.BaseUrl, RESRC, resource), ex);
-            }
-
-            return clientResponse;
-        }
-
-        protected async virtual Task<ClientResponse<T>> GetAsync<T>(
+        protected async virtual Task<ClientResponse<T>> Get<T>(
             Dictionary<String, String> headers = null,
             Dictionary<String, String> parameters = null,
             String resource = null)
@@ -127,46 +93,7 @@ namespace Intercom.Core
             return clientResponse;
         }
 
-        protected virtual ClientResponse<T> Post<T>(String body,
-                                                    Dictionary<String, String> headers = null,
-                                                    Dictionary<String, String> parameters = null,
-                                                    String resource = null)
-            where T : class
-        {
-            if (String.IsNullOrEmpty(body))
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
-            ClientResponse<T> clientResponse = null;
-
-            IRestClient client = null;
-            try
-            {
-                client = BuildClient();
-                IRestRequest request = BuildRequest(httpMethod: Method.POST, headers: headers, parameters: parameters, body: body, resource: resource);
-                IRestResponse response = client.Execute(request);
-                clientResponse = HandleResponse<T>(response);
-            }
-            catch (ApiException ex)
-            {
-                throw ex;
-            }
-            catch (JsonConverterException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new IntercomException(String.Format("An exception occurred " +
-                        "while calling the endpoint. Method: {0}, Url: {1}, Resource: {2}, Sub-Resource: {3}, Body: {4}",
-                        "POST", client.BaseUrl, RESRC, resource, body), ex);
-            }
-
-            return clientResponse;
-        }
-
-        protected async virtual Task<ClientResponse<T>> PostAsync<T>(String body,
+        protected async virtual Task<ClientResponse<T>> Post<T>(String body,
                                             Dictionary<String, String> headers = null,
                                             Dictionary<String, String> parameters = null,
                                             String resource = null)
@@ -205,47 +132,7 @@ namespace Intercom.Core
             return clientResponse;
         }
 
-        protected virtual ClientResponse<T> Post<T>(T body,
-                                                    Dictionary<String, String> headers = null,
-                                                    Dictionary<String, String> parameters = null,
-                                                    String resource = null)
-            where T : class
-        {
-            if (body == null)
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
-            ClientResponse<T> clientResponse = null;
-
-            IRestClient client = null;
-            try
-            {
-                String requestBody = Serialize<T>(body);
-                client = BuildClient();
-                IRestRequest request = BuildRequest(httpMethod: Method.POST, headers: headers, parameters: parameters, body: requestBody, resource: resource);
-                IRestResponse response = client.Execute(request);
-                clientResponse = HandleResponse<T>(response);
-            }
-            catch (ApiException ex)
-            {
-                throw ex;
-            }
-            catch (JsonConverterException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new IntercomException(String.Format("An exception occurred " +
-                        "while calling the endpoint. Method: {0}, Url: {1}, Resource: {2}, Sub-Resource: {3}, Body-Type: {4}",
-                        "POST", client.BaseUrl, RESRC, resource, typeof(T)), ex);
-            }
-
-            return clientResponse;
-        }
-
-        protected async virtual Task<ClientResponse<T>> PostAsync<T>(T body,
+        protected async virtual Task<ClientResponse<T>> Post<T>(T body,
                                             Dictionary<String, String> headers = null,
                                             Dictionary<String, String> parameters = null,
                                             String resource = null)
@@ -285,46 +172,7 @@ namespace Intercom.Core
             return clientResponse;
         }
 
-        protected virtual ClientResponse<T> Put<T>(String body,
-                                                   Dictionary<String, String> headers = null,
-                                                   Dictionary<String, String> parameters = null,
-                                                   String resource = null)
-            where T : class
-        {
-            if (String.IsNullOrEmpty(body))
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
-            ClientResponse<T> clientResponse = null;
-
-            IRestClient client = null;
-            try
-            {
-                client = BuildClient();
-                IRestRequest request = BuildRequest(httpMethod: Method.PUT, headers: headers, parameters: parameters, body: body, resource: resource);
-                IRestResponse response = client.Execute(request);
-                clientResponse = HandleResponse<T>(response);
-            }
-            catch (ApiException ex)
-            {
-                throw ex;
-            }
-            catch (JsonConverterException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new IntercomException(String.Format("An exception occurred " +
-                        "while calling the endpoint. Method: {0}, Url: {1}, Resource: {2}, Sub-Resource: {3}, Body: {4}",
-                        "POST", client.BaseUrl, RESRC, resource, body), ex);
-            }
-
-            return clientResponse;
-        }
-
-        protected async virtual Task<ClientResponse<T>> PutAsync<T>(String body,
+        protected async virtual Task<ClientResponse<T>> Put<T>(String body,
                                                    Dictionary<String, String> headers = null,
                                                    Dictionary<String, String> parameters = null,
                                                    String resource = null)
@@ -363,47 +211,7 @@ namespace Intercom.Core
             return clientResponse;
         }
 
-        protected virtual ClientResponse<T> Put<T>(T body,
-                                                   Dictionary<String, String> headers = null,
-                                                   Dictionary<String, String> parameters = null,
-                                                   String resource = null)
-            where T : class
-        {
-            if (body == null)
-            {
-                throw new ArgumentNullException(nameof(body));
-            }
-
-            ClientResponse<T> clientResponse = null;
-
-            IRestClient client = null;
-            try
-            {
-                String requestBody = Serialize<T>(body);
-                client = BuildClient();
-                IRestRequest request = BuildRequest(httpMethod: Method.PUT, headers: headers, parameters: parameters, body: requestBody, resource: resource);
-                IRestResponse response = client.Execute(request);
-                clientResponse = HandleResponse<T>(response);
-            }
-            catch (ApiException ex)
-            {
-                throw ex;
-            }
-            catch (JsonConverterException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new IntercomException(String.Format("An exception occurred " +
-                        "while calling the endpoint. Method: {0}, Url: {1}, Resource: {2}, Sub-Resource: {3}",
-                        "POST", client.BaseUrl, RESRC, resource), ex);
-            }
-
-            return clientResponse;
-        }
-
-        protected async virtual Task<ClientResponse<T>> PutAsync<T>(T body,
+        protected async virtual Task<ClientResponse<T>> Put<T>(T body,
                                                    Dictionary<String, String> headers = null,
                                                    Dictionary<String, String> parameters = null,
                                                    String resource = null)
@@ -443,41 +251,7 @@ namespace Intercom.Core
             return clientResponse;
         }
 
-        protected virtual ClientResponse<T> Delete<T>(
-            Dictionary<String, String> headers = null,
-            Dictionary<String, String> parameters = null,
-            String resource = null)
-            where T : class
-        {
-            ClientResponse<T> clientResponse = null;
-
-            IRestClient client = null;
-            try
-            {
-                client = BuildClient();
-                IRestRequest request = BuildRequest(httpMethod: Method.DELETE, headers: headers, parameters: parameters, resource: resource);
-                IRestResponse response = client.Execute(request);
-                clientResponse = HandleResponse<T>(response);
-            }
-            catch (ApiException ex)
-            {
-                throw ex;
-            }
-            catch (JsonConverterException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                throw new IntercomException(String.Format("An exception occurred " +
-                        "while calling the endpoint. Method: {0}, Url: {1}, Resource: {2}, Sub-Resource: {3}",
-                        "POST", client.BaseUrl, RESRC, resource), ex);
-            }
-
-            return clientResponse;
-        }
-
-        protected async virtual Task<ClientResponse<T>> DeleteAsync<T>(
+        protected async virtual Task<ClientResponse<T>> Delete<T>(
             Dictionary<String, String> headers = null,
             Dictionary<String, String> parameters = null,
             String resource = null)

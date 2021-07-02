@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Factories;
@@ -37,7 +38,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Contact Create (Contact contact)
+        public async Task<Contact> Create (Contact contact)
         {
             if (contact == null) {
                 throw new ArgumentNullException (nameof(contact));
@@ -46,14 +47,14 @@ namespace Intercom.Clients
             ClientResponse<Contact> result = null;
 
             if(contact == null)
-                result = Post<Contact> (String.Empty);
+                result = await Post<Contact> (String.Empty);
             else
-                result = Post<Contact> (contact);
+                result = await Post<Contact> (contact);
             
             return result.Result;
         }
 
-        public Contact Update (Contact contact)
+        public async Task<Contact> Update (Contact contact)
         {
             if (contact == null) {
                 throw new ArgumentNullException (nameof(contact));
@@ -65,22 +66,22 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Contact> result = null;
-            result = Post<Contact> (contact);
+            result = await Post<Contact> (contact);
             return result.Result;
         }
 
-        public Contact View (String id)
+        public async Task<Contact> View (String id)
         {
             if (String.IsNullOrEmpty (id)) {
                 throw new ArgumentNullException (nameof(id));
             }
 
             ClientResponse<Contact> result = null;
-            result = Get<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;       
         }
 
-        public Contact View (Contact contact)
+        public async Task<Contact> View (Contact contact)
         {
             if (contact == null) {
                 throw new ArgumentNullException (nameof(contact));
@@ -90,10 +91,10 @@ namespace Intercom.Clients
             ClientResponse<Contact> result = null;
 
             if (!String.IsNullOrEmpty (contact.id)) {
-                result = Get<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + contact.id);
+                result = await Get<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + contact.id);
             } else if (!String.IsNullOrEmpty (contact.user_id)) {
                 parameters.Add (Constants.USER_ID, contact.user_id);
-                result = Get<Contact> (parameters: parameters);
+                result = await Get<Contact> (parameters: parameters);
             } else {
                 throw new ArgumentException ("you need to provide either 'contact.id', 'contact.user_id' to view a contact.");
             }
@@ -101,14 +102,14 @@ namespace Intercom.Clients
             return result.Result;
         }
 
-        public Contacts List ()
+        public async Task<Contacts> List ()
         {
             ClientResponse<Contacts> result = null;
-            result = Get<Contacts> ();
+            result = await Get<Contacts> ();
             return result.Result;
         }
 
-        public Contacts List(String email)
+        public async Task<Contacts> List(String email)
         {
             if (String.IsNullOrEmpty(email)) {
                 throw new ArgumentNullException (nameof(email));
@@ -118,11 +119,11 @@ namespace Intercom.Clients
             parameters.Add(Constants.EMAIL, email);
 
             ClientResponse<Contacts> result = null;
-            result = Get<Contacts> (parameters: parameters);
+            result = await Get<Contacts> (parameters: parameters);
             return result.Result;
         }
 
-        public Contacts List(Dictionary<String, String> parameters)
+        public async Task<Contacts> List(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -135,11 +136,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Contacts> result = null;
-            result = Get<Contacts>(parameters: parameters);
+            result = await Get<Contacts>(parameters: parameters);
             return result.Result;
         }
 
-        public Contacts Scroll(String scrollParam = null)
+        public async Task<Contacts> Scroll(String scrollParam = null)
         {
             Dictionary<String, String> parameters = new Dictionary<String, String>();
             if (!String.IsNullOrWhiteSpace(scrollParam))
@@ -148,11 +149,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Contacts> result = null;
-            result = Get<Contacts>(parameters: parameters, resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + "scroll");
+            result = await Get<Contacts>(parameters: parameters, resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + "scroll");
             return result.Result;
         }
 
-        public Contact Delete (Contact contact)
+        public async Task<Contact> Delete (Contact contact)
         {
             if (contact == null) {
                 throw new ArgumentNullException (nameof(contact));
@@ -162,10 +163,10 @@ namespace Intercom.Clients
             ClientResponse<Contact> result = null;
 
             if (!String.IsNullOrEmpty (contact.id)) {
-                result = Delete<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + contact.id);
+                result = await Delete<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + contact.id);
             } else if (!String.IsNullOrEmpty (contact.user_id)) {
                 parameters.Add (Constants.USER_ID, contact.user_id);
-                result = Delete<Contact> (parameters: parameters);
+                result = await Delete<Contact> (parameters: parameters);
             } else {
                 throw new ArgumentException ("you need to provide either 'contact.id', 'contact.user_id' to delete a contact.");
             }
@@ -173,18 +174,18 @@ namespace Intercom.Clients
             return result.Result;
         }
 
-        public Contact Delete (String id)
+        public async Task<Contact> Delete (String id)
         {
             if (String.IsNullOrEmpty (id)) {
                 throw new ArgumentNullException (nameof(id));
             }
 
             ClientResponse<Contact> result = null;
-            result = Delete<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Delete<Contact> (resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public User Convert (Contact contact)
+        public async Task<User> Convert (Contact contact)
         {
             if (contact == null)
                 throw new ArgumentNullException ("'contact' argument is null.");
@@ -208,12 +209,12 @@ namespace Intercom.Clients
                                NullValueHandling = NullValueHandling.Ignore
                            });
 
-            var result = Post<User> (jsonBody, resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + "convert");
+            var result = await Post<User> (jsonBody, resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + "convert");
 
             return result.Result;
         }
 
-        public User Convert (Contact contact, User user)
+        public async Task<User> Convert (Contact contact, User user)
         {
             if (contact == null)
                 throw new ArgumentNullException ("'contact' argument is null.");
@@ -254,7 +255,7 @@ namespace Intercom.Clients
                                NullValueHandling = NullValueHandling.Ignore
                            });
 
-            var result = Post<User> (jsonBody, resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + "convert" );
+            var result = await Post<User> (jsonBody, resource: CONTACTS_RESOURCE + Path.DirectorySeparatorChar + "convert" );
 
             return result.Result;
         }

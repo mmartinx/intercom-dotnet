@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Exceptions;
@@ -35,7 +36,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Conversation Reply(AdminConversationReply reply)
+        public async Task<Conversation> Reply(AdminConversationReply reply)
         {
             if (reply == null)
             {
@@ -44,11 +45,11 @@ namespace Intercom.Clients
 
             ClientResponse<Conversation> result = null;
             String body = Serialize<AdminConversationReply>(reply);
-            result = Post<Conversation>(body, resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + reply.conversation_id + Path.DirectorySeparatorChar + REPLY_RESOURCE);
+            result = await Post<Conversation>(body, resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + reply.conversation_id + Path.DirectorySeparatorChar + REPLY_RESOURCE);
             return result.Result;
         }
 
-        public AdminConversationMessage Create(AdminConversationMessage adminMessage)
+        public async Task<AdminConversationMessage> Create(AdminConversationMessage adminMessage)
         {
             if (adminMessage == null)
             {
@@ -56,11 +57,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<AdminConversationMessage> result = null;
-            result = Post<AdminConversationMessage>(adminMessage, resource: MESSAGES_RESOURCE);
+            result = await Post<AdminConversationMessage>(adminMessage, resource: MESSAGES_RESOURCE);
             return result.Result;
         }
 
-        public Conversations List(Admin admin, bool? open = null, bool? displayAsPlainText = null)
+        public async Task<Conversations> List(Admin admin, bool? open = null, bool? displayAsPlainText = null)
         {
             if (admin == null)
             {
@@ -89,11 +90,11 @@ namespace Intercom.Clients
 
             parameters.Add(Constants.ADMIN_ID, admin.id);
 
-            result = Get<Conversations>(parameters: parameters);
+            result = await Get<Conversations>(parameters: parameters);
             return result.Result;
         }
 
-        public Conversation ReplyLastConversation(AdminLastConversationReply lastConversationReply)
+        public async Task<Conversation> ReplyLastConversation(AdminLastConversationReply lastConversationReply)
         {
             if (lastConversationReply.intercom_user_id == null)
             {
@@ -102,7 +103,7 @@ namespace Intercom.Clients
 
             ClientResponse<Conversation> result = null;
             String body = Serialize<AdminLastConversationReply>(lastConversationReply);
-            result = Post<Conversation>(body, resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + "last" + Path.DirectorySeparatorChar + REPLY_RESOURCE);
+            result = await Post<Conversation>(body, resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + "last" + Path.DirectorySeparatorChar + REPLY_RESOURCE);
             return result.Result;
         }
     }

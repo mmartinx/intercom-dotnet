@@ -11,6 +11,7 @@ using Intercom.Factories;
 using RestSharp;
 using RestSharp.Authenticators;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Intercom.Clients
 {
@@ -44,7 +45,7 @@ namespace Intercom.Clients
         {
         }
 
-        public User Create(User user)
+        public async Task<User> Create(User user)
         {
             if (user == null)
             {
@@ -57,11 +58,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<User> result = null;
-            result = Post<User>(Transform(user));
+            result = await Post<User>(Transform(user));
             return result.Result;
         }
 
-        public User Update(User user)
+        public async Task<User> Update(User user)
         {
             if (user == null)
             {
@@ -74,11 +75,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<User> result = null;
-            result = Post<User>(Transform(user));
+            result = await Post<User>(Transform(user));
             return result.Result;
         }
 
-        private User CreateOrUpdate(User user)
+        private async Task<User> CreateOrUpdate(User user)
         {
             if (user.custom_attributes != null && user.custom_attributes.Any())
             {
@@ -99,11 +100,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<User> result = null;
-            result = Post<User>(Transform(user));
+            result = await Post<User>(Transform(user));
             return result.Result;
         }
 
-        public User View(Dictionary<String, String> parameters)
+        public async Task<User> View(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -117,11 +118,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
 
-            result = Get<User>(parameters: parameters);
+            result = await Get<User>(parameters: parameters);
             return result.Result;
         }
 
-        public User View(String id)
+        public async Task<User> View(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -129,11 +130,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<User> result = null;
-            result = Get<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public User View(User user)
+        public async Task<User> View(User user)
         {
             if (user == null)
             {
@@ -145,17 +146,17 @@ namespace Intercom.Clients
 
             if (!String.IsNullOrEmpty(user.id))
             {
-                result = Get<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + user.id);
+                result = await Get<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + user.id);
             }
             else if (!String.IsNullOrEmpty(user.user_id))
             {
                 parameters.Add(Constants.USER_ID, user.user_id);
-                result = Get<User>(parameters: parameters);
+                result = await Get<User>(parameters: parameters);
             }
             else if (!String.IsNullOrEmpty(user.email))
             {
                 parameters.Add(Constants.EMAIL, user.email);
-                result = Get<User>(parameters: parameters);
+                result = await Get<User>(parameters: parameters);
             }
             else
             {
@@ -165,33 +166,33 @@ namespace Intercom.Clients
             return result.Result;
         }
 
-        public Users List()
+        public async Task<Users> List()
         {
             ClientResponse<Users> result = null;
-            result = Get<Users>();
+            result = await Get<Users>();
             return result.Result;
         }
 
-        public Users List(Dictionary<String, String> parameters)
+        public async Task<Users> List(Dictionary<String, String> parameters)
         {
             ClientResponse<Users> result = null;
-            result = Get<Users>(parameters: parameters);
+            result = await Get<Users>(parameters: parameters);
             return result.Result;
         }
 
         // TODO: Implement paging (by Pages argument)
-        private Users Next(Pages pages)
+        private async Task<Users> Next(Pages pages)
         {
-            return null;
+            return await Task.FromResult<Users>(null);
         }
 
         // TODO: Implement paging
-        private Users Next(int page = 1, int perPage = 50, OrderBy orderBy = OrderBy.Dsc, String sortBy = UserSortBy.created_at)
+        private async Task<Users> Next(int page = 1, int perPage = 50, OrderBy orderBy = OrderBy.Dsc, String sortBy = UserSortBy.created_at)
         {
-            return null;
+            return await Task.FromResult<Users>(null);
         }
 
-        public Users Scroll(String scrollParam = null)
+        public async Task<Users> Scroll(String scrollParam = null)
         {
             Dictionary<String, String> parameters = new Dictionary<String, String>();
             ClientResponse<Users> result = null;
@@ -201,11 +202,11 @@ namespace Intercom.Clients
                 parameters.Add("scroll_param", scrollParam);
             }
 
-            result = Get<Users>(parameters: parameters, resource: USERS_RESOURCE + Path.DirectorySeparatorChar + "scroll");
+            result = await Get<Users>(parameters: parameters, resource: USERS_RESOURCE + Path.DirectorySeparatorChar + "scroll");
             return result.Result;
         }
 
-        public User Archive(User user)
+        public async Task<User> Archive(User user)
         {
             if (user == null)
             {
@@ -217,17 +218,17 @@ namespace Intercom.Clients
 
             if (!String.IsNullOrEmpty(user.id))
             {
-                result = Delete<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + user.id);
+                result = await Delete<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + user.id);
             }
             else if (!String.IsNullOrEmpty(user.user_id))
             {
                 parameters.Add(Constants.USER_ID, user.user_id);
-                result = Delete<User>(parameters: parameters);
+                result = await Delete<User>(parameters: parameters);
             }
             else if (!String.IsNullOrEmpty(user.email))
             {
                 parameters.Add(Constants.EMAIL, user.email);
-                result = Delete<User>(parameters: parameters);
+                result = await Delete<User>(parameters: parameters);
             }
             else
             {
@@ -238,12 +239,12 @@ namespace Intercom.Clients
         }
 
         [Obsolete("Replaced by Archive(User user). Renamed for consistency with API language.")]
-        public User Delete(User user)
+        public async Task<User> Delete(User user)
         {
-            return Archive(user);
+            return await Archive(user);
         }
 
-        public User Archive(String id)
+        public async Task<User> Archive(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -251,17 +252,17 @@ namespace Intercom.Clients
             }
 
             ClientResponse<User> result = null;
-            result = Delete<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Delete<User>(resource: USERS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
         [Obsolete("Replaced by Archive(String id). Renamed for consistency with API language.")]
-        public User Delete(String id)
+        public async Task<User> Delete(String id)
         {
-            return Archive(id);
+            return await Archive(id);
         }
 
-        public User UpdateLastSeenAt(String id, long timestamp)
+        public async Task<User> UpdateLastSeenAt(String id, long timestamp)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -275,11 +276,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { id = id, last_request_at = timestamp });
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User UpdateLastSeenAt(User user, long timestamp)
+        public async Task<User> UpdateLastSeenAt(User user, long timestamp)
         {
             if (user == null)
             {
@@ -303,11 +304,11 @@ namespace Intercom.Clients
                 throw new ArgumentException("you need to provide either 'user.id', 'user.user_id', 'user.email' to update a user's last seen at.");
 
             ClientResponse<User> result = null;
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User UpdateLastSeenAt(String id)
+        public async Task<User> UpdateLastSeenAt(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -316,11 +317,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { id = id, update_last_request_at = true });
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User UpdateLastSeenAt(User user)
+        public async Task<User> UpdateLastSeenAt(User user)
         {
             if (user == null)
             {
@@ -339,11 +340,11 @@ namespace Intercom.Clients
                 throw new ArgumentException("you need to provide either 'user.id', 'user.user_id', 'user.email' to update a user's last seen at.");
 
             ClientResponse<User> result = null;
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User IncrementUserSession(String id)
+        public async Task<User> IncrementUserSession(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -352,11 +353,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { id = id, new_session = true });
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User IncrementUserSession(String id, List<String> companyIds)
+        public async Task<User> IncrementUserSession(String id, List<String> companyIds)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -375,11 +376,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { id = id, new_session = true, companies = companyIds.Select(c => new { id = c }) });
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User RemoveCompanyFromUser(String id, List<String> companyIds)
+        public async Task<User> RemoveCompanyFromUser(String id, List<String> companyIds)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -398,11 +399,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { id = id, companies = companyIds.Select(c => new { id = c, remove = true }) });
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User RemoveCompanyFromUser(User user, List<String> companyIds)
+        public async Task<User> RemoveCompanyFromUser(User user, List<String> companyIds)
         {
             if (user == null)
             {
@@ -426,11 +427,11 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { id = user.id, companies = companyIds.Select(c => new { id = c, remove = true }) });
-            result = Post<User>(body);
+            result = await Post<User>(body);
             return result.Result;
         }
 
-        public User PermanentlyDeleteUser(String id)
+        public async Task<User> PermanentlyDeleteUser(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -439,7 +440,7 @@ namespace Intercom.Clients
 
             ClientResponse<User> result = null;
             String body = JsonConvert.SerializeObject(new { intercom_user_id = id });
-            result = Post<User>(resource: PERMANENT_DELETE_RESOURCE, body: body);
+            result = await Post<User>(resource: PERMANENT_DELETE_RESOURCE, body: body);
             return result.Result;
         }
 

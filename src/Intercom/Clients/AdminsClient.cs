@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Exceptions;
@@ -33,14 +34,14 @@ namespace Intercom.Clients
         {
         }
 
-        public Admins List ()
+        public async Task<Admins> List ()
         {
             ClientResponse<Admins> result = null;
-            result = Get<Admins> ();
+            result = await Get<Admins> ();
             return result.Result;
         }
 
-        public Admins List (Dictionary<String, String> parameters)
+        public async Task<Admins> List (Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -53,11 +54,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Admins> result = null;
-            result = Get<Admins> ();
+            result = await Get<Admins> ();
             return result.Result;
         }
 
-        public Admin View (String id)
+        public async Task<Admin> View (String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -65,11 +66,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Admin> result = null;
-            result = Get<Admin> (resource: ADMINS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Admin> (resource: ADMINS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public Admin View(Admin admin)
+        public async Task<Admin> View(Admin admin)
         {
             if (admin == null) {
                 throw new ArgumentNullException (nameof(admin));
@@ -81,7 +82,7 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Admin> result = null;
-            result = Get<Admin> (resource: ADMINS_RESOURCE + Path.DirectorySeparatorChar + admin.id);
+            result = await Get<Admin> (resource: ADMINS_RESOURCE + Path.DirectorySeparatorChar + admin.id);
             return result.Result;  
         }
     }

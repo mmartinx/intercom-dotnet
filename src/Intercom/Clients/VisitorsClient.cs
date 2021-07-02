@@ -11,6 +11,7 @@ using Intercom.Factories;
 using RestSharp;
 using RestSharp.Authenticators;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Intercom.Clients
 {
@@ -36,7 +37,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Visitor View(Dictionary<String, String> parameters)
+        public async Task<Visitor> View(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -50,11 +51,11 @@ namespace Intercom.Clients
 
             ClientResponse<Visitor> result = null;
 
-            result = Get<Visitor>(parameters: parameters);
+            result = await Get<Visitor>(parameters: parameters);
             return result.Result;
         }
 
-        public Visitor View(String id)
+        public async Task<Visitor> View(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -62,11 +63,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Visitor> result = null;
-            result = Get<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;       
         }
 
-        public Visitor View(Visitor visitor)
+        public async Task<Visitor> View(Visitor visitor)
         {
             if (visitor == null)
             {
@@ -78,12 +79,12 @@ namespace Intercom.Clients
 
             if (!String.IsNullOrEmpty(visitor.id))
             {
-                result = Get<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + visitor.id);
+                result = await Get<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + visitor.id);
             }
             else if (!String.IsNullOrEmpty(visitor.user_id))
             {
                 parameters.Add(Constants.USER_ID, visitor.user_id);
-                result = Get<Visitor>(parameters: parameters);
+                result = await Get<Visitor>(parameters: parameters);
             }
             else
             {
@@ -93,7 +94,7 @@ namespace Intercom.Clients
             return result.Result;   
         }
 
-        public Visitor Update(Visitor visitor)
+        public async Task<Visitor> Update(Visitor visitor)
         {
             if (visitor == null)
             {
@@ -106,11 +107,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Visitor> result = null;
-            result = Put<Visitor>(visitor);
+            result = await Put<Visitor>(visitor);
             return result.Result;
         }
 
-        public Visitor Delete(Visitor visitor)
+        public async Task<Visitor> Delete(Visitor visitor)
         {
             if (visitor == null)
             {
@@ -124,11 +125,11 @@ namespace Intercom.Clients
 
             Dictionary<String, String> parameters = new Dictionary<string, string>();
             ClientResponse<Visitor> result = null;
-            result = Delete<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + visitor.id);
+            result = await Delete<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + visitor.id);
             return result.Result;       
         }
 
-        public Visitor Delete(String id)
+        public async Task<Visitor> Delete(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -136,11 +137,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Visitor> result = null;
-            result = Delete<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Delete<Visitor>(resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;           
         }
 
-        public User ConvertToUser(Visitor visitor, User user)
+        public async Task<User> ConvertToUser(Visitor visitor, User user)
         {
             if (visitor == null)
             {
@@ -187,11 +188,11 @@ namespace Intercom.Clients
                 });
 
             ClientResponse<User> result = null;
-            result = Post<User>(b, resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + VISITORS_CONVERT);
+            result = await Post<User>(b, resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + VISITORS_CONVERT);
             return result.Result;
         }
 
-        public Contact ConvertToContact(Visitor visitor)
+        public async Task<Contact> ConvertToContact(Visitor visitor)
         {
             if (visitor == null) {
                 throw new ArgumentNullException (nameof(visitor));
@@ -220,7 +221,7 @@ namespace Intercom.Clients
                 });
 
             ClientResponse<Contact> result = null;
-            result = Post<Contact> (b, resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + VISITORS_CONVERT);
+            result = await Post<Contact> (b, resource: VISITORS_RESOURCE + Path.DirectorySeparatorChar + VISITORS_CONVERT);
             return result.Result;
         }
     }

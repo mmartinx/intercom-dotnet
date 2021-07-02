@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Exceptions;
@@ -41,7 +42,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Tag Create(Tag tag)
+        public async Task<Tag> Create(Tag tag)
         {
             if (tag == null)
             {
@@ -54,11 +55,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Tag> result = null;
-            result = Post<Tag>(tag);
+            result = await Post<Tag>(tag);
             return result.Result;
         }
 
-        public Tag Update(Tag tag)
+        public async Task<Tag> Update(Tag tag)
         {
             if (tag == null)
             {
@@ -71,11 +72,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Tag> result = null;
-            result = Post<Tag>(tag);
+            result = await Post<Tag>(tag);
             return result.Result;
         }
 
-        public Tag View(String id)
+        public async Task<Tag> View(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -83,11 +84,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Tag> result = null;
-            result = Get<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public Tag View(Tag tag)
+        public async Task<Tag> View(Tag tag)
         {
             if (tag == null)
             {
@@ -98,7 +99,7 @@ namespace Intercom.Clients
 
             if (!String.IsNullOrEmpty(tag.id))
             {
-                result = Get<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + tag.id);
+                result = await Get<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + tag.id);
             }
             else
             {
@@ -108,14 +109,14 @@ namespace Intercom.Clients
             return result.Result;
         }
 
-        public Tags List()
+        public async Task<Tags> List()
         {
             ClientResponse<Tags> result = null;
-            result = Get<Tags>();
+            result = await Get<Tags>();
             return result.Result;
         }
 
-        public Tags List(Dictionary<String, String> parameters)
+        public async Task<Tags> List(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -128,11 +129,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Tags> result = null;
-            result = Get<Tags>(parameters: parameters);
+            result = await Get<Tags>(parameters: parameters);
             return result.Result;
         }
 
-        public void Delete(Tag tag)
+        public async Task Delete(Tag tag)
         {
             if (tag == null)
             {
@@ -144,20 +145,20 @@ namespace Intercom.Clients
                 throw new ArgumentException("you need to provide 'tag.id' to delete a tag.");
             }
 
-            Delete<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + tag.id);
+            await Delete<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + tag.id);
         }
 
-        public void Delete(String id)
+        public async Task Delete(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
 
-            Delete<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + id);
+            await Delete<Tag>(resource: TAGS_RESOURCE + Path.DirectorySeparatorChar + id);
         }
 
-        public Tag Tag(String name, List<Company> companies)
+        public async Task<Tag> Tag(String name, List<Company> companies)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -176,12 +177,12 @@ namespace Intercom.Clients
 
             ClientResponse<Tag> result = null;
             String body = CreateBody(name, false, companies: companies);
-            result = Post<Tag>(body);
+            result = await Post<Tag>(body);
 
             return result.Result;
         }
 
-        public Tag Tag(String name, List<User> users)
+        public async Task<Tag> Tag(String name, List<User> users)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -200,12 +201,12 @@ namespace Intercom.Clients
 
             ClientResponse<Tag> result = null;
             String body = CreateBody(name, false, users: users);
-            result = Post<Tag>(body);
+            result = await Post<Tag>(body);
 
             return result.Result;
         }
 
-        public Tag Tag(String name, List<Contact> contacts)
+        public async Task<Tag> Tag(String name, List<Contact> contacts)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -224,27 +225,27 @@ namespace Intercom.Clients
 
             ClientResponse<Tag> result = null;
             String body = CreateBody(name, false, contacts.ToList<User>());
-            result = Post<Tag>(body);
+            result = await Post<Tag>(body);
 
             return result.Result;
         }
 
-        public Tag Tag(String name, List<String> ids, EntityType tagType)
+        public async Task<Tag> Tag(String name, List<String> ids, EntityType tagType)
         {
             switch (tagType)
             {
                 case EntityType.Company:
-                    return Tag(name, ids.Select(id => new Company() { id = id }).ToList());
+                    return await Tag(name, ids.Select(id => new Company() { id = id }).ToList());
                 case EntityType.Contact:
-                    return Tag(name, ids.Select(id => new Contact() { id = id }).ToList());
+                    return await Tag(name, ids.Select(id => new Contact() { id = id }).ToList());
                 case EntityType.User:
-                    return Tag(name, ids.Select(id => new User() { id = id }).ToList());
+                    return await Tag(name, ids.Select(id => new User() { id = id }).ToList());
                 default:
-                    return Tag(name, ids.Select(id => new User() { id = id }).ToList());
+                    return await Tag(name, ids.Select(id => new User() { id = id }).ToList());
             }
         }
 
-        public Tag Untag(String name, List<User> users)
+        public async Task<Tag> Untag(String name, List<User> users)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -263,12 +264,12 @@ namespace Intercom.Clients
 
             ClientResponse<Tag> result = null;
             String body = CreateBody(name, true, users: users);
-            result = Post<Tag>(body);
+            result = await Post<Tag>(body);
 
             return result.Result;
         }
 
-        public Tag Untag(String name, List<Company> companies)
+        public async Task<Tag> Untag(String name, List<Company> companies)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -287,12 +288,12 @@ namespace Intercom.Clients
 
             ClientResponse<Tag> result = null;
             String body = CreateBody(name, true, companies: companies);
-            result = Post<Tag>(body);
+            result = await Post<Tag>(body);
 
             return result.Result;
         }
 
-        public Tag Untag(String name, List<Contact> contacts)
+        public async Task<Tag> Untag(String name, List<Contact> contacts)
         {
 
             if (String.IsNullOrEmpty(name))
@@ -313,23 +314,23 @@ namespace Intercom.Clients
 
             ClientResponse<Tag> result = null;
             String body = CreateBody(name, true, contacts.ToList<User>());
-            result = Post<Tag>(body);
+            result = await Post<Tag>(body);
 
             return result.Result;
         }
 
-        public Tag Untag(String name, List<String> ids, EntityType tagType)
+        public async Task<Tag> Untag(String name, List<String> ids, EntityType tagType)
         {
             switch (tagType)
             {
                 case EntityType.Company:
-                    return Untag(name, ids.Select(id => new Company() { id = id }).ToList());
+                    return await Untag(name, ids.Select(id => new Company() { id = id }).ToList());
                 case EntityType.Contact:
-                    return Untag(name, ids.Select(id => new Contact() { id = id }).ToList());
+                    return await Untag(name, ids.Select(id => new Contact() { id = id }).ToList());
                 case EntityType.User:
-                    return Untag(name, ids.Select(id => new User() { id = id }).ToList());
+                    return await Untag(name, ids.Select(id => new User() { id = id }).ToList());
                 default:
-                    return Untag(name, ids.Select(id => new User() { id = id }).ToList());
+                    return await Untag(name, ids.Select(id => new User() { id = id }).ToList());
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Exceptions;
@@ -42,7 +43,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Conversation View(String id, bool? displayAsPlainText = null)
+        public async Task<Conversation> View(String id, bool? displayAsPlainText = null)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -57,18 +58,18 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Conversation> result = null;
-            result = Get<Conversation>(resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Conversation>(resource: CONVERSATIONS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public Conversations ListAll ()
+        public async Task<Conversations> ListAll ()
         {
             ClientResponse<Conversations> result = null;
-            result = Get<Conversations>(resource: CONVERSATIONS_RESOURCE, parameters: null);
+            result = await Get<Conversations>(resource: CONVERSATIONS_RESOURCE, parameters: null);
             return result.Result;
         }
 
-        public Conversations ListAll(Dictionary<String, String> parameters)
+        public async Task<Conversations> ListAll(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -76,7 +77,7 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Conversations> result = null;
-            result = Get<Conversations>(resource: CONVERSATIONS_RESOURCE, parameters: parameters);
+            result = await Get<Conversations>(resource: CONVERSATIONS_RESOURCE, parameters: parameters);
             return result.Result;
         }
     }

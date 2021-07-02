@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Exceptions;
@@ -32,7 +33,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Segments List(bool company = false)
+        public async Task<Segments> List(bool company = false)
         {
             ClientResponse<Segments> result = null;
 
@@ -40,17 +41,17 @@ namespace Intercom.Clients
             {
                 Dictionary<String, String> parameters = new Dictionary<string, string>();
                 parameters.Add(Constants.TYPE, Constants.COMPANY);
-                result = Get<Segments>(parameters: parameters);
+                result = await Get<Segments>(parameters: parameters);
             }
             else
             {
-                result = Get<Segments>();
+                result = await Get<Segments>();
             }
 
             return result.Result;
         }
 
-        public Segments List(Dictionary<String, String> parameters)
+        public async Task<Segments> List(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -63,11 +64,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Segments> result = null;
-            result = Get<Segments>(parameters: parameters);
+            result = await Get<Segments>(parameters: parameters);
             return result.Result;
         }
 
-        public Segment View(String id, bool? includeCount = null)
+        public async Task<Segment> View(String id, bool? includeCount = null)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -81,11 +82,11 @@ namespace Intercom.Clients
             };
 
             ClientResponse<Segment> result = null;
-            result = Get<Segment>(parameters: parameters, resource: SEGMENTS_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Segment>(parameters: parameters, resource: SEGMENTS_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public Segment View(Segment segment, bool? includeCount = null)
+        public async Task<Segment> View(Segment segment, bool? includeCount = null)
         {
             if (segment == null)
             {
@@ -104,7 +105,7 @@ namespace Intercom.Clients
             };
 
             ClientResponse<Segment> result = null;
-            result = Get<Segment>(parameters: parameters, resource: SEGMENTS_RESOURCE + Path.DirectorySeparatorChar + segment.id);
+            result = await Get<Segment>(parameters: parameters, resource: SEGMENTS_RESOURCE + Path.DirectorySeparatorChar + segment.id);
             return result.Result;  
         }
     }

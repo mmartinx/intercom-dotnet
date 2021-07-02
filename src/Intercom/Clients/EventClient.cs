@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Clients;
 using Intercom.Core;
 using Intercom.Data;
@@ -33,7 +34,7 @@ namespace Intercom.Clients
         {
         }
 
-		public Event Create (Event @event)
+		public async Task<Event> Create (Event @event)
 		{
             if (@event == null)
             {
@@ -51,11 +52,11 @@ namespace Intercom.Clients
             }
 
 			ClientResponse<Event> result = null;
-            result = Post<Event> (@event);
+            result = await Post<Event> (@event);
 			return result.Result;
 		}
 
-        public Events List (User user)
+        public async Task<Events> List (User user)
 		{
 			Dictionary<String, String> parameters = new Dictionary<string, string> ();
             parameters.Add (Constants.TYPE, "user");
@@ -72,11 +73,11 @@ namespace Intercom.Clients
 				throw new ArgumentException (String.Format ("you should provide at least value for one of these parameters {0}, or {1}, or {2} .", Constants.INTERCOM_USER_ID, Constants.USER_ID, Constants.EMAIL));
 			}
 
-			result = Get<Events> (parameters: parameters);
+			result = await Get<Events> (parameters: parameters);
 			return result.Result;
 		}
 
-		public Events List (Dictionary<String, String> parameters)
+		public async Task<Events> List (Dictionary<String, String> parameters)
 		{
 			if (parameters == null) {
 				throw new ArgumentNullException (nameof(parameters));
@@ -97,7 +98,7 @@ namespace Intercom.Clients
 			}
 				
 			ClientResponse<Events> result = null;
-			result = Get<Events> (parameters: parameters);
+			result = await Get<Events> (parameters: parameters);
 			return result.Result;
 		}
 	}

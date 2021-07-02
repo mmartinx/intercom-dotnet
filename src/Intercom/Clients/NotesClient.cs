@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Clients;
 using Intercom.Core;
 using Intercom.Data;
@@ -35,7 +36,7 @@ namespace Intercom.Clients
         {
         }
 
-        public Note Create(Note note)
+        public async Task<Note> Create(Note note)
         {
             if (note == null)
             {
@@ -88,11 +89,11 @@ namespace Intercom.Clients
                     NullValueHandling = NullValueHandling.Ignore
                 });
 
-            result = Post<Note>(b);
+            result = await Post<Note>(b);
             return result.Result;
         }
 
-        public Note Create(User user, String body, String adminId = null)
+        public async Task<Note> Create(User user, String body, String adminId = null)
         {
             if (user == null)
             {
@@ -130,12 +131,12 @@ namespace Intercom.Clients
                     NullValueHandling = NullValueHandling.Ignore
                 });
 
-            result = Post<Note>(b);
+            result = await Post<Note>(b);
 
             return result.Result;
         }
 
-        public Note View(String id)
+        public async Task<Note> View(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
@@ -143,11 +144,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Note> result = null;
-            result = Get<Note>(resource: NOTES_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Note>(resource: NOTES_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;       
         }
 
-        public Notes List(User user)
+        public async Task<Notes> List(User user)
         {
             if (user == null)
             {
@@ -160,17 +161,17 @@ namespace Intercom.Clients
             if (!String.IsNullOrEmpty(user.id))
             {
                 parameters.Add(Constants.ID, user.id);
-                result = Get<Notes>(parameters: parameters);
+                result = await Get<Notes>(parameters: parameters);
             }
             else if (!String.IsNullOrEmpty(user.user_id))
             {
                 parameters.Add(Constants.USER_ID, user.user_id);
-                result = Get<Notes>(parameters: parameters);
+                result = await Get<Notes>(parameters: parameters);
             }
             else if (!String.IsNullOrEmpty(user.email))
             {
                 parameters.Add(Constants.EMAIL, user.email);
-                result = Get<Notes>(parameters: parameters);         
+                result = await Get<Notes>(parameters: parameters);         
             }
             else
             {

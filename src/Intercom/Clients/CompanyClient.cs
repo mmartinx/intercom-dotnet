@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Intercom.Core;
 using Intercom.Data;
 using Intercom.Factories;
@@ -31,17 +32,17 @@ namespace Intercom.Clients
         {
         }
 
-        public Company Create(Company company)
+        public async Task<Company> Create(Company company)
         {
-            return CreateOrUpdate(company);
+            return await CreateOrUpdate(company);
         }
 
-        public Company Update(Company company)
+        public async Task<Company> Update(Company company)
         {
-            return CreateOrUpdate(company);
+            return await CreateOrUpdate(company);
         }
 
-        private Company CreateOrUpdate(Company company)
+        private async Task<Company> CreateOrUpdate(Company company)
         {
             if (company == null)
             {
@@ -67,22 +68,22 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Company> result = null;
-            result = Post<Company>(Transform(company));
+            result = await Post<Company>(Transform(company));
             return result.Result;
         }
 
-        public Company View(String id)
+        public async Task<Company> View(String id)
         {
             if (String.IsNullOrEmpty(id))
             {
                 throw new ArgumentNullException(nameof(id));
             }
             ClientResponse<Company> result = null;
-            result = Get<Company>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + id);
+            result = await Get<Company>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + id);
             return result.Result;
         }
 
-        public Company View(Company company)
+        public async Task<Company> View(Company company)
         {
             if (company == null)
             {
@@ -94,17 +95,17 @@ namespace Intercom.Clients
 
             if (!String.IsNullOrEmpty(company.id))
             {
-                result = Get<Company>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + company.id);
+                result = await Get<Company>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + company.id);
             }
             else if (!String.IsNullOrEmpty(company.name))
             {
                 parameters.Add(Constants.NAME, company.name);
-                result = Get<Company>(parameters: parameters);
+                result = await Get<Company>(parameters: parameters);
             }
             else if (!String.IsNullOrEmpty(company.company_id))
             {
                 parameters.Add(Constants.COMPANY_ID, company.company_id);
-                result = Get<Company>(parameters: parameters);
+                result = await Get<Company>(parameters: parameters);
             }
             else
             {
@@ -113,14 +114,14 @@ namespace Intercom.Clients
             return result.Result;
         }
 
-        public Companies List()
+        public async Task<Companies> List()
         {
             ClientResponse<Companies> result = null;
-            result = Get<Companies>();
+            result = await Get<Companies>();
             return result.Result;
         }
 
-        public Companies List(Dictionary<String, String> parameters)
+        public async Task<Companies> List(Dictionary<String, String> parameters)
         {
             if (parameters == null)
             {
@@ -133,11 +134,11 @@ namespace Intercom.Clients
             }
 
             ClientResponse<Companies> result = null;
-            result = Get<Companies>(parameters: parameters);
+            result = await Get<Companies>(parameters: parameters);
             return result.Result;
         }
 
-        public Companies Scroll(String scrollParam = null)
+        public async Task<Companies> Scroll(String scrollParam = null)
         {
             Dictionary<String, String> parameters = new Dictionary<String, String>();
             ClientResponse<Companies> result = null;
@@ -147,11 +148,11 @@ namespace Intercom.Clients
                 parameters.Add("scroll_param", scrollParam);
             }
 
-            result = Get<Companies>(parameters: parameters, resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + "scroll");
+            result = await Get<Companies>(parameters: parameters, resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + "scroll");
             return result.Result;
         }
 
-        public Users ListUsers(Company company)
+        public async Task<Users> ListUsers(Company company)
         {
             if (company == null)
             {
@@ -164,13 +165,13 @@ namespace Intercom.Clients
             if (!String.IsNullOrEmpty(company.id))
             {
                 String resource = company.id + Path.DirectorySeparatorChar + "users";
-                result = Get<Users>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + resource);
+                result = await Get<Users>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + resource);
             }
             else if (!String.IsNullOrEmpty(company.company_id))
             {
                 parameters.Add(Constants.TYPE, Constants.USER);
                 parameters.Add(Constants.COMPANY_ID, company.company_id);
-                result = Get<Users>(parameters: parameters);
+                result = await Get<Users>(parameters: parameters);
             }
             else
             {
@@ -180,7 +181,7 @@ namespace Intercom.Clients
             return result.Result;
         }
 
-        public Users ListUsers(String companyId)
+        public async Task<Users> ListUsers(String companyId)
         {
             if (String.IsNullOrEmpty(companyId))
             {
@@ -189,7 +190,7 @@ namespace Intercom.Clients
 
             String resource = companyId + Path.DirectorySeparatorChar + "users";
             ClientResponse<Users> result = null;
-            result = Get<Users>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + resource);
+            result = await Get<Users>(resource: COMPANIES_RESOURCE + Path.DirectorySeparatorChar + resource);
             return result.Result;
         }
 
