@@ -11,6 +11,7 @@ using RestSharp.Authenticators;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Moq;
+using System.Threading.Tasks;
 
 namespace Intercom.Test
 {
@@ -39,39 +40,39 @@ namespace Intercom.Test
         public void Create_WithNull_ThrowException()
         {
             SetupMock();
-            Assert.Throws<ArgumentNullException>(() => usersClient.Create(null));
+            Assert.Throws<ArgumentNullException>(async () => await usersClient .Create(null));
         }
 
         [Test()]
         public void Create_NoUserIdOrEmail_ThrowException()
         {
             SetupMock();
-            Assert.Throws<ArgumentException>(() => usersClient.Create(new User()));
+            Assert.Throws<ArgumentException>(async () => await usersClient .Create(new User()));
         }
 
         [Test()]
         public void Archive_NoIdOrUserIdOrEmail_ThrowException()
         {
             SetupMock();
-            Assert.Throws<ArgumentException>(() => usersClient.Archive(new User()));
+            Assert.Throws<ArgumentException>(async () => await usersClient .Archive(new User()));
         }
 
         [Test()]
         public void PermanentlyDeleteUser_NoId_ThrowException()
         {
             SetupMock();
-            Assert.Throws<ArgumentNullException>(() => usersClient.PermanentlyDeleteUser(null));
+            Assert.Throws<ArgumentNullException>(async () => await usersClient.PermanentlyDeleteUser(null));
         }
 
         [Test()]
         public void Update_NoIdOrUserIdOrEmail_ThrowException()
         {
             SetupMock();
-            Assert.Throws<ArgumentException>(() => usersClient.Update(new User()));
+            Assert.Throws<ArgumentException>(async () => await usersClient.Update(new User()));
         }
 
         [Test()]
-        public void View_ByStringId_ReturnsObjectAsExpected()
+        public async Task View_ByStringId_ReturnsObjectAsExpected()
         {
             var userId = "id";
             var restClientMock = new Mock<RestClient>();
@@ -83,7 +84,8 @@ namespace Intercom.Test
             restClientMock.Setup(x => x.Execute(It.IsAny<IRestRequest>())).Returns(restResponse);
             var restClient = restClientMock.Object;
             SetupMock(restClient);
-            Assert.AreEqual(userId, usersClient.View(userId).user_id);
+            var user = await usersClient.View(userId);
+            Assert.AreEqual(userId, user.user_id);
         }
     }
 }

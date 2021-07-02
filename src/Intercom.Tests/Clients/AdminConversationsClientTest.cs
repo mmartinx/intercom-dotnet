@@ -29,25 +29,25 @@ namespace Intercom.Test
         [Test()]
         public void Reply_WithNull_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => adminConversationsClient.Reply(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => adminConversationsClient.Reply(null));
         }
 
         [Test()]
         public void Create_WithNull_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => adminConversationsClient.Create(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => adminConversationsClient.Create(null));
         }
 
         [Test()]
         public void List_NoId_ThrowException()
         {
-            Assert.Throws<ArgumentException>(() => adminConversationsClient.List(new Admin()));
+            Assert.ThrowsAsync<ArgumentException>(() => adminConversationsClient.List(new Admin()));
         }
 
         [Test()]
         public void ReplyLastConversation_NoReply_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => adminConversationsClient.ReplyLastConversation(new AdminLastConversationReply()));
+            Assert.ThrowsAsync<ArgumentNullException>(() => adminConversationsClient.ReplyLastConversation(new AdminLastConversationReply()));
         }
     }
 }

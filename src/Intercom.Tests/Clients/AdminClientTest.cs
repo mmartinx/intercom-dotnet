@@ -10,6 +10,7 @@ using RestSharp.Authenticators;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Moq;
+using System.Threading.Tasks;
 
 namespace Intercom.Test
 {
@@ -29,13 +30,13 @@ namespace Intercom.Test
         [Test()]
         public void View_WithEmptyString_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => adminsClient.View(String.Empty));
+            Assert.ThrowsAsync<ArgumentNullException>(async () => await adminsClient.View(String.Empty));
         }
 
         [Test()]
         public void View_NoId_ThrowException()
         {
-            Assert.Throws<ArgumentException>(() => adminsClient.View(new Admin()));
+            Assert.ThrowsAsync<ArgumentException>(async () => await adminsClient.View(new Admin()));
         }
     }
 }

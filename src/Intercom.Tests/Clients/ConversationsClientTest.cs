@@ -28,13 +28,13 @@ namespace Intercom.Test
         [Test()]
         public void View_WithNull_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => conversationsClient.View(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => conversationsClient.View(null));
         }
 
         [Test()]
         public void ListAll_WithNullParameters_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => conversationsClient.ListAll(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => conversationsClient.ListAll(null));
         }
 
     }

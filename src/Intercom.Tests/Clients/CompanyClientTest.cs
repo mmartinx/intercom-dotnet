@@ -28,7 +28,7 @@ namespace Intercom.Test
         [Test()]
         public void Create_WithNull_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => companyClient.Create(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => companyClient.Create(null));
         }
 
         [Test()]
@@ -39,9 +39,9 @@ namespace Intercom.Test
             for (int i = 0; i < 105; i++)
                 custom_attributes.Add($"field{i}", "value");
 
-            Assert.Throws<ArgumentException>(() => 
+            Assert.ThrowsAsync<ArgumentException>(async () => 
             {
-                companyClient.Create(new Company() { custom_attributes = custom_attributes });
+                await companyClient.Create(new Company() { custom_attributes = custom_attributes });
             });
         }
 
@@ -50,16 +50,16 @@ namespace Intercom.Test
         {
             Dictionary<string, object> custom_attributes = new Dictionary<string, object>();
             custom_attributes.Add("invalid.ch$ar", "invalid");
-            Assert.Throws<ArgumentException>(() =>
+            Assert.ThrowsAsync<ArgumentException>(async () =>
             {
-                companyClient.Create(new Company() { custom_attributes = custom_attributes });
+                await companyClient.Create(new Company() { custom_attributes = custom_attributes });
             });
         }
 
         [Test()]
         public void Update_WithNull_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => companyClient.Update(null));
+            Assert.ThrowsAsync<ArgumentNullException>(() => companyClient.Update(null));
         }
     }
 }
